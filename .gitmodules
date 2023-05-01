@@ -1,0 +1,3 @@
+[submodule "HomeFlix-filmes"]
+	path = HomeFlix-filmes
+	url = https://github.com/leonardordelgado/HomeFlix-filmes.git

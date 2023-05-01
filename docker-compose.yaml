@@ -1,0 +1,24 @@
+version: "3.9"
+services:
+  mongo-filmes:
+    image: mysql
+    environment:
+      - MYSQL_DATABASE=HomeFlix_filmes
+      - MYSQL_USER=homeflix_db
+      - MYSQL_ROOT_PASSWORD=homeflix_pw
+    container_name: homeflix_filmes_db
+    ports:
+      - 3350:3306
+    networks:
+      - HomeFlix
+
+  homeflix_filmes:
+    build: ./HomeFlix-Filmes
+    depends_on:
+      - mongo-filmes
+    networks:
+      - HomeFlix
+
+networks:
+  HomeFlix:
+    driver: bridge
