@@ -1,8 +1,8 @@
-import {insetFilmes} from "../models/FilmesAdd.js"
 import {consultaFilme} from "../models/FilmesBusca.js"
+import updatefilme from "../models/editaFilme.js"
 
 
-export async function addfilme(req, res){
+async function editaFilme(req,res){
     const erros =[]
     if(!req.body.titulo || typeof req.body.titulo == undefined || req.body.titulo == null){
         erros.push({texto: "titulo inválido"})
@@ -23,27 +23,30 @@ export async function addfilme(req, res){
         if(erros.length > 0){
             res.send(erros)
         }else{
-            const result = await consultaFilme(req.body.titulo)
+            const result = await consultaFilme(req.body.titulo)          
             if(result == null){
-                const AddFilme = {
-                    titulo:req.body.titulo,
-                    descricao:req.body.descricao,
-                    url:req.body.url,
-                    faixaEtaria:req.body.faixaEtaria,
-                    genero:req.body.genero
+                
+                const update = {
+                    $set:{
+                        titulo:req.body.titulo,
+                        descricao:req.body.descricao,
+                        url:req.body.url,
+                        faixaEtaria:req.body.faixaEtaria,
+                        genero:req.body.genero
+                    }
                 }
                 try{
-                    insetFilmes(AddFilme)
+                    updatefilme(req,update)
                     const Filme = await consultaFilme(req.body.titulo)
                     res.send(Filme)
                 }catch{
-                    (erro)=>res.send("erro ao adicionar",erro)
+                    (erro)=>res.send("erro ao atualizar filme",erro)
                 }finally{
                         (erro)=> console.log(erro)
                 }
             }else{
-                res.send({erro:`O filme ja Existe com os Sequintes parametros`, filme:result})
-            } 
+                res.send({erro:`O titulo informado ja esxite com os parametros`, filme:result}) 
+            }
         }
 }
-export default addfilme;
+export default editaFilme;
