@@ -1,8 +1,9 @@
-import {consultaFilme} from "../models/FilmesBusca.js"
-import updatefilme from "../models/editaFilme.js"
+import Filmes from "../models/Filmes.js"
+import { ObjectId } from "bson"
 
 
-async function editaFilme(req,res){
+
+ export async function updateFilme(req,res){
     const erros =[]
     if(!req.body.titulo || typeof req.body.titulo == undefined || req.body.titulo == null){
         erros.push({texto: "titulo inválido"})
@@ -13,40 +14,32 @@ async function editaFilme(req,res){
     if(!req.body.url || typeof req.body.url == undefined || req.body.url == null){
         erros.push({texto: "url inválido"})
     }
-    if(!req.body.faixaEtaria || typeof req.body.faixaEtaria == undefined || req.body.faixaEtaria == null){
+    if(!req.body.faixaetaria || typeof req.body.faixaetaria == undefined || req.body.faixaetaria == null){
         erros.push({texto: "faixaEtaria inválida"})
     }
-    if(!req.body.genero || typeof req.body.genero == undefined || req.body.genero == null){
+    if(!req.body.genero || typeof req.body.genero == undefined || req.body.genero == null || req.body.faixaetaria == String){
         erros.push({texto: "genero inválido"})
     }
 
         if(erros.length > 0){
             res.send(erros)
         }else{
-            const result = await consultaFilme(req.body.titulo)          
-            if(result == null){
-                
-                const update = {
-                    $set:{
-                        titulo:req.body.titulo,
-                        descricao:req.body.descricao,
-                        url:req.body.url,
-                        faixaEtaria:req.body.faixaEtaria,
-                        genero:req.body.genero
-                    }
-                }
-                try{
-                    updatefilme(req,update)
-                    const Filme = await consultaFilme(req.body.titulo)
-                    res.send(Filme)
-                }catch{
-                    (erro)=>res.send("erro ao atualizar filme",erro)
-                }finally{
-                        (erro)=> console.log(erro)
-                }
-            }else{
-                res.send({erro:`O titulo informado ja esxite com os parametros`, filme:result}) 
-            }
+            const filmes = await Filmes.findOne({titulo: req.body.titulo})
+        if(filmes == null){
+            const filter = {_id: new ObjectId(`${req.params.id}`)}
+            console.log(filter)
+            
+                Filmes.findByIdAndUpdate(filter, {$set: req.body}).then(
+                    res.status(200).send({message:'Titulo atualizado com sucesso',filme:Filmes})
+                )
+               .catch ((err)=>
+                res.status(500).send({message:`${err.message}- o titulo não foi atualizado`}))
+            
+            
+        }else{
+            res.send({erro:`O titulo informado ja esxite com os parametros`, filme:filmes})
         }
+    
+    
+    }
 }
-export default editaFilme;

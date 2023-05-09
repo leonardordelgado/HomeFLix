@@ -1,23 +1,22 @@
-import {MongoClient} from 'mongodb';
-import { UUID } from 'bson';
+import mongoose from 'mongoose'
+
 
 const url = "mongodb://api_HomeFlix:api_HomeFlix@localhost:3350/api_HomeFlix_Filmes"
-const client = new MongoClient(url)
-
 
 try{
-    client.connect()
-    console.log("Conexão realizada Com o mongoDB")
+    mongoose.connect(url)
+    console.log("conexão com o banco feita com sucesso")
 }
 catch{
     (erro)=>{
         console.log("Existe um erro", erro)
     }
 };
+let db = mongoose.Connection;
 
 
 
-export default client;
+export default db;
 
 
 

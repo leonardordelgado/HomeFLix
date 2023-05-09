@@ -1,21 +1,17 @@
 import express from "express";
 const app = express()
-
-
-
-
-import * as dotenv from "dotenv";
-dotenv.config();
-
+import db from "./db/conection.js";
+import Filmes from "./models/Filmes.js";
+import routes from "./routers/index.js";
 import bodyParser from "body-parser";
+import * as dotenv from "dotenv";
 
-import router_get from "./routers/get.js"
-import router_post from "./routers/post.js";
-
-
+dotenv.config();
 app.use(express.json())
 
-app.use("/home", router_get);
-app.use("/filme", router_post);
+routes(app);
 
-app.listen(process.env.PORT_SERVER,()=> console.log(`servidor rodando na porta ${process.env.PORT_SERVER}`))
+
+app.listen(process.env.PORT_SERVER,
+    ()=> console.log(`servidor rodando na porta ${process.env.PORT_SERVER}`)
+)
