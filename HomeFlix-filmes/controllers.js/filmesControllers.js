@@ -1,48 +1,92 @@
 import Filmes from "../models/Filmes.js";
-import {addfilme} from "../validacoes/addfilme.js";
-import { updateFilme } from "../validacoes/editaFilme.js";
 import { ObjectId } from "bson"
+import { updateFilme } from "../validacoes/editaFilme.js";
 
 class FilmesController{
-    static listarFilmes = async (req, res)=>{
+    static listarFilmes = async (req, res, next)=>{
         try{
             const filmesResult = await Filmes.find()
             res.status(200).json(filmesResult)
-        }catch (err){
-            res.status(500).json(err)
+        }catch (erro){
+            next(erro)
         }
     }
 
-    static findFilmeTitulo= async(req, res)=>{
-        const filme = await Filmes.findOne({titulo: req.params.titulo})
-        if(filme == null){
-            res.status(500).send({message: `${req.params.titulo} -titulo não existe`})
-        }else{
-            res.status(200).send(filme)
+    static findFilmeTitulo= async(req, res, next)=>{
+        try{
+            const filme = await Filmes.findOne({titulo:req.query.titulo})
+            if(filme.length == 0){
+                res.status(200).send({message: `${req.query.titulo} -titulo não existe`})
+                
+            }else{
+                res.status(200).send(filme)
+            }
+        }catch (erro){
+            next(erro)
+        }
+        
+
+    }
+
+    static deleteFilmes = async(req, res, next)=>{
+        try{
+            const filter = {_id: new ObjectId(`${req.params.id}`)}
+            const find = await Filmes.findById(filter)
+                if(find == null){
+                    res.status(400).send({message:`Titulo não existe`,filme:req.params})
+                }else{
+                    Filmes.findByIdAndDelete(filter)
+                    .then(res.status(200).send("Titulo Deletado com sucesso"))
+                    .catch((err)=>{res.status(500).send({message:`${err.message} - titulo não pode ser deletado`})})
+                }
+        }catch (erro){
+            next(erro)
+        }
+        
+    }
+
+    static insertFilmes = async (req, res, next)=>{
+         try{
+            const filmes = await Filmes.findOne({titulo: req.body.titulo})
+            if(filmes == null){
+
+                if(!req.body.genero || typeof req.body.genero == undefined || req.body.genero == null || req.body.genero.length == 0){
+                    res.status(500).send({message:"Informe um ou mais generos" })
+                }else{
+                    let addFilme = new Filmes(req.body)
+                    const result = await addFilme.save()
+                    res.status(201).send(result.toJSON()) 
+                }
+            }else{
+                res.status(500).send({message:"Este titulo já existe no banco de dados",filme:filmes.toJSON() })
+            }
+         }catch (erro){
+            next(erro)
+         }
+    }
+
+    static updateFilme = async (req ,res, next)=>{
+        try{
+            updateFilme(req, res)
+        }catch (erro){
+            next(erro)
+        }
+    }
+
+    static buscaPorGenero = async(req, res,next)=>{
+        try{
+            const filme = await Filmes.find({genero:req.query.genero})
+            if(filme.length == 0){
+                res.status(200).send(`Não existe titulos para o genero ${req.query.genero}`)
+            }else{
+                res.status(200).send(filme)
+            }
+        }catch (erro){
+            next(erro)
         }
 
+        
     }
-
-    static deleteFilmes = async(req, res)=>{
-        const filter = {_id: new ObjectId(`${req.params.id}`)}
-        const find = await Filmes.findById(filter)
-        if(find == null){
-            res.status(400).send({message:`Titulo não existe`,filme:req.params})
-        }else{
-            Filmes.findByIdAndDelete(filter)
-            .then(res.status(200).send("Titulo Deletado com sucesso"))
-            .catch((err)=>{res.status(500).send({message:`${err.message} - titulo não pode ser deletado`})})
-        }
-    }
-
-    static insertFilmes = async (req, res)=>{
-         addfilme(req, res)
-    }
-
-    static updateFilme = async (req ,res)=>{
-        updateFilme(req, res)
-    }
-
 }
 
 export default FilmesController;

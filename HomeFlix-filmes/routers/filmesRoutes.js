@@ -4,7 +4,8 @@ const router = express()
 
 router
     .get("/filmes", FilmesController.listarFilmes)
-    .get("/filmes/:titulo", FilmesController.findFilmeTitulo)
+    .get("/filmes/busca", FilmesController.buscaPorGenero)
+    .get("/filmes/titulo", FilmesController.findFilmeTitulo)
     .post("/filmes", FilmesController.insertFilmes)
     .put("/filmes/:id", FilmesController.updateFilme)
     .delete("/filmes/:id", FilmesController.deleteFilmes)
