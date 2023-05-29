@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 
-const url = "mongodb://api_HomeFlix:api_HomeFlix@homeflix_filmes_db:27017/api_HomeFlix_Filmes"
+const url = "mongodb://api_HomeFlix:api_HomeFlix@localhost:30002/api_HomeFlix_Filmes"
 
 try{
     mongoose.connect(url)

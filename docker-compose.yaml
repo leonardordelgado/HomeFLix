@@ -10,17 +10,20 @@ services:
     volumes:
       - ./docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     container_name: homeflix_filmes_db
+    ports:
+      - 30002:27017
     networks:
       - HomeFlix
 
-  homeflix_filmes:
-    build: ./HomeFlix-Filmes
-    depends_on:
-      - mongo-filmes
-    networks:
-      - HomeFlix
-    ports:
-      - 3000:3000
+  #homeflix_filmes:
+   # build: ./HomeFlix-Filmes
+    #depends_on:
+     # - mongo-filmes
+    
+    #networks:
+     # - HomeFlix
+    #ports:
+      #- 3000:3000
 
 networks:
   HomeFlix:

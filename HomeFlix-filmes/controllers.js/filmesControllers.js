@@ -49,7 +49,7 @@ class FilmesController{
          try{
             const filmes = await Filmes.findOne({titulo: req.body.titulo})
             if(filmes == null){
-
+                console.log(req.body)
                 if(!req.body.genero || typeof req.body.genero == undefined || req.body.genero == null || req.body.genero.length == 0){
                     res.status(500).send({message:"Informe um ou mais generos" })
                 }else{

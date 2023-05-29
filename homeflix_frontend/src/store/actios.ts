@@ -1,0 +1,3 @@
+export const OBTEM_FILMES = "OBTEM_FILMES"
+export const DELETAR_FILME = "DELETAR_FILME"
+export const ADICIONAR_FILME = "ADICIONAR_FILME"

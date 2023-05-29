@@ -1,0 +1,2 @@
+export const  EXCLUIR_FILME ='EXCLUIR_FILME'
+export const  INCLUI_FILME = 'INCLUI_FILME'
