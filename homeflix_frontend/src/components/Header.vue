@@ -14,7 +14,7 @@
           </RouterLink>
         </li>
         <li class="nav-item active">
-          <RouterLink to="/projetos" class="nav-link">
+          <RouterLink to="/" class="nav-link">
             Filmes
           </RouterLink>
         </li>
@@ -24,7 +24,7 @@
       </ul>
 
       <p class="control has-icons-left ">
-        <input class="input" type="texto" placeholder="Informe o titulo da busca!" />
+        <input class="input" type="texto" placeholder="Informe o titulo da busca!" v-model="filtro" />
         <span class="icon is-small is-left">
           <i class="fas fa-search"></i>
         </span>
@@ -35,7 +35,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { useStore } from '@/store';
+import { OBTEM_FILMES } from '@/store/actios';
+import { defineComponent, ref, computed, watchEffect} from 'vue';
 
 export default defineComponent({
   name: 'Header-app',
@@ -48,9 +50,22 @@ export default defineComponent({
   emits:['aoClick'],
   methods:{
     modalClick():void{
+
       this.$emit('aoClick', this.model)
     }
+  },
+  setup(){
+    const store = useStore()
+    const filtro = ref('')
+    watchEffect(()=>{
+      store.dispatch(OBTEM_FILMES, filtro.value)
+    })
+    return{
+      filtro
+    }
   }
+  
+  
 
 
 });
@@ -78,6 +93,7 @@ h1 {
 .navbar {
   width: 100%;
   background-color: var(--bg-header);
+  z-index: 1;
 }
 
 .is-text:hover {

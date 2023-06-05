@@ -12,11 +12,14 @@ class FilmesController{
         }
     }
 
-    static findFilmeTitulo= async(req, res, next)=>{
+    static findFilmeTitulo = async(req, res, next)=>{
+        
         try{
-            const filme = await Filmes.findOne({titulo:req.query.titulo})
+            
+            const filme = await Filmes.find({ titulo: { $regex: new RegExp(req.params.titulo, 'i')}, })
+            
             if(filme.length == 0){
-                res.status(200).send({message: `${req.query.titulo} -titulo não existe`})
+                res.status(406).send({message: `${req.params.titulo}  não existe`})
                 
             }else{
                 res.status(200).send(filme)

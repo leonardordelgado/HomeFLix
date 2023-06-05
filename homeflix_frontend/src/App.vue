@@ -9,7 +9,7 @@
         <button class="delete" @click="fecharModel" aria-label="close"></button>
       </template>
       <template v-slot:corpo>
-        <form  id="add-filme" @submit.prevent="AdicionarFilme" class="form" >
+        <form  id="add-filme" @submit.prevent="AdicionarFilme" class="form" @submit="fecharModel" >
           <div class="field">
             <label for="titulo" class="label">Titulo</label>
             <input type="text" class="input capt" id="titulo"  name="titulo"  />
@@ -22,6 +22,9 @@
 
             <label for="faixaetaria" class="label">faixaetaria</label>
             <input type="number" class="input capt" id="faixaetaria" name="faixaetaria" />
+
+            <label for="capa" class="label">Capa</label>
+            <input type="text" class="input capt" id="capa" name="capa" />
 
             <label for="genero" class="label">Genero</label>
             <input type="text" class="input capt" id="genero" name="genero" />
@@ -36,6 +39,7 @@
 
 
     <div class=" corpo col-14 ">
+      <Notificacoes />
       <RouterView>
 
       </RouterView>
@@ -45,25 +49,25 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, ref } from 'vue';
+import {defineComponent} from 'vue';
 import Header from './components/Header.vue'
 import ModalAddFilme from './components/ModalAddFilme.vue';
 import { useStore } from './store';
 import { ADICIONAR_FILME } from './store/actios';
-
-
-
+import Notificacoes from './components/Notificacoes.vue';
 export default defineComponent({
   name: 'App',
   components: {
     Header,
-    ModalAddFilme
+    ModalAddFilme,
+    Notificacoes
   },
   data() {
     return {
       modalclicaco: false
     }
   },
+  
   emits:['fecharmodal'],
   
   methods: {
@@ -73,10 +77,14 @@ export default defineComponent({
     fecharModel(){
       this.modalclicaco = false
     },
+    
   
     },
+    
     setup(){
       const store = useStore()
+      
+
       const AdicionarFilme =()=>{
         var input = (document.querySelectorAll('.capt'))
         const filme = {
@@ -84,10 +92,10 @@ export default defineComponent({
         descricao: (input[1] as HTMLInputElement).value,
         url: (input[2] as HTMLInputElement).value,
         faixaetaria: (input[3] as HTMLInputElement).value,
-        genero: [(input[4] as HTMLInputElement).value]
+        capa: (input[4] as HTMLInputElement).value,
+        genero: [(input[5] as HTMLInputElement).value]
       }
         store.dispatch(ADICIONAR_FILME, filme)
-        
       }
 
       return{
@@ -101,6 +109,7 @@ export default defineComponent({
 main {
   --bg-header: rgba(0, 0, 0, 0.08);
   --color-text-nav: rgb(0, 0, 0);
+  --title-color: rgb(255,255,255);
 }
 
 .nav-header {

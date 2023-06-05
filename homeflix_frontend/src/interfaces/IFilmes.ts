@@ -4,5 +4,6 @@ export default interface IFilmes{
 	descricao:string,
 	url:string,
 	faixaetaria: number,
+	capa: string,
 	genero: string[]
 }

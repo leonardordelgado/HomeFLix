@@ -1,0 +1,10 @@
+version: '3.7'
+services:
+  web:
+    image: node
+    working_dir: /web
+    command: npx http-server
+    volumes:
+      - .:/web
+    ports:
+      - 8005:8080

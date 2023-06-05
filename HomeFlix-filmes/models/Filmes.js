@@ -20,10 +20,15 @@ const Filme = new mongoose.Schema({
         min:[2,"A faixa etária minima e de 2 anos"],
         max:[19,"A faixa etária maxima e de 18 anos"]
     },
+    capa:{
+        type:String, 
+        require:[true,"Imforme uma capa"]
+    },
     genero:{
         type:Array, 
         require:[true,"Informe um ou mais generos"]
     }
+    
 },
 {
     versionKey:false

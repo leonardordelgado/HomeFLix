@@ -1,2 +1,7 @@
 export const  EXCLUIR_FILME ='EXCLUIR_FILME'
 export const  INCLUI_FILME = 'INCLUI_FILME'
+export const INFORME_ERROS = 'INFORME_ERROS'
+export const INFORME_SUCESSO = 'INFORME_SUCESSO'
+export const AVISO = 'AVISO'
+export const CARREGA_FILMES = 'CARREGA_FILMES'
+export const NOTIFICAR = 'NOTIFICAR'
